@@ -16,3 +16,10 @@ app.get("/", (req,res)=>{
 app.listen(3000, ()=>{
   console.log("Server started");
 });
+//REGISTER USER
+app.post("/register",async(req,res)=>
+{
+  try{
+    const{name,email,password,role}=req.body
+  }
+})
