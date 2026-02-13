@@ -42,3 +42,18 @@ app.post("/register", async (req, res) => {
     res.status(500).json({ message: "Error registering user" });
   }
 });
+// LOGIN USER
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email, password });
+
+  if (!user) {
+    return res.json({ message: "Invalid credentials" });
+  }
+
+  res.json({
+    message: "Login successful",
+    role: user.role
+  });
+});
