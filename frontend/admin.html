@@ -1,0 +1,53 @@
+<h2>Create Quiz</h2>
+
+<input id="title" placeholder="Quiz Title">
+<input id="duration" placeholder="Duration">
+
+<button onclick="createQuiz()">Create Quiz</button>
+
+<hr>
+
+<h3>Add Question</h3>
+
+<input id="quizId" placeholder="Quiz ID">
+<input id="question" placeholder="Question">
+<input id="opt1" placeholder="Option 1">
+<input id="opt2" placeholder="Option 2">
+<input id="opt3" placeholder="Option 3">
+<input id="opt4" placeholder="Option 4">
+<input id="answer" placeholder="Correct Answer">
+
+<button onclick="addQuestion()">Add Question</button>
+
+<script>
+async function createQuiz(){
+  const res = await fetch("http://localhost:3000/create-quiz",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      title: title.value,
+      duration: duration.value,
+      createdBy: "admin"
+    })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+async function addQuestion(){
+  const res = await fetch("http://localhost:3000/add-question",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      quizId: quizId.value,
+      question: question.value,
+      options: [opt1.value,opt2.value,opt3.value,opt4.value],
+      correctAnswer: answer.value
+    })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+</script>
