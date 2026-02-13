@@ -13,13 +13,32 @@ app.get("/", (req,res)=>{
   res.send("Server running");
 });
 
+const quizRoutes = require("./quiz");
+app.use("/", quizRoutes);
+
+
 app.listen(3000, ()=>{
   console.log("Server started");
 });
 //REGISTER USER
-app.post("/register",async(req,res)=>
-{
-  try{
-    const{name,email,password,role}=req.body
+// REGISTER
+app.post("/register", async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+
+    const user = new User({
+      name,
+      email,
+      password,
+      role
+    });
+
+    await user.save();
+
+    res.json({ message: "User registered successfully" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error registering user" });
   }
-})
+});
