@@ -1,52 +1,42 @@
 const express = require("express");
 const router = express.Router();
-
-const Quiz = require("../models/quiz");
-const Question = require("../models/question");
+const Quiz = require("../models/Quiz");
+const Question = require("../models/Question");
 
 // CREATE QUIZ
-router.post("/create-quiz", async (req, res) => {
-  try {
-    const { title, duration, createdBy } = req.body;
-
-    const quiz = new Quiz({ title, duration, createdBy });
-    await quiz.save();
-
-    res.json({ message: "Quiz created", quiz });
-  } catch (err) {
-    res.status(500).json({ message: "Error creating quiz" });
-  }
+router.post("/create-quiz", async (req,res)=>{
+  const quiz = new Quiz(req.body);
+  await quiz.save();
+  res.json({ message:"Quiz created", quiz });
 });
 
 // ADD QUESTION
-router.post("/add-question", async (req, res) => {
-  try {
-    const { quizId, question, options, correctAnswer } = req.body;
-
-    const q = new Question({
-      quizId,
-      question,
-      options,
-      correctAnswer
-    });
-
-    await q.save();
-    res.json({ message: "Question added" });
-  } catch (err) {
-    res.status(500).json({ message: "Error adding question" });
-  }
+router.post("/add-question", async (req,res)=>{
+  const question = new Question(req.body);
+  await question.save();
+  res.json({ message:"Question added" });
 });
 
-// GET ALL QUIZZES
-router.get("/quizzes", async (req, res) => {
-  const quizzes = await Quiz.find();
-  res.json(quizzes);
-});
-
-// GET QUESTIONS OF QUIZ
-router.get("/quiz/:id", async (req, res) => {
-  const questions = await Question.find({ quizId: req.params.id });
+// GET QUESTIONS BY QUIZ
+router.get("/quiz/:id", async (req,res)=>{
+  const questions = await Question.find({ quizId:req.params.id });
   res.json(questions);
+});
+
+// SUBMIT QUIZ
+router.post("/submit-quiz", async (req,res)=>{
+  const { quizId, answers } = req.body;
+
+  const questions = await Question.find({ quizId });
+
+  let score = 0;
+  questions.forEach(q=>{
+    if(answers[q._id] === q.correctAnswer){
+      score++;
+    }
+  });
+
+  res.json({ score });
 });
 
 module.exports = router;

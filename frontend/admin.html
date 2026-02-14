@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="navbar">
+    <div>Online Quiz System</div>
+    <div class="nav-links">
+      <button onclick="goHome()">Home</button>
+      <button id="logoutBtn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="page">
+  <div class="container">
+    <div class="card">
 <h2>Create Quiz</h2>
 
 <input id="title" placeholder="Quiz Title">
@@ -18,15 +38,25 @@
 <input id="answer" placeholder="Correct Answer">
 
 <button onclick="addQuestion()">Add Question</button>
+    </div>
+  </div>
 
 <script>
 async function createQuiz(){
-  const res = await fetch("http://localhost:3000/create-quiz",{
+  const titleVal = document.getElementById("title").value.trim();
+  const durationVal = document.getElementById("duration").value.trim();
+
+  if(!titleVal || !durationVal){
+    alert("Enter quiz title and duration");
+    return;
+  }
+
+  const res = await fetch("/api/create-quiz",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({
-      title: title.value,
-      duration: duration.value,
+      title: titleVal,
+      duration: durationVal,
       createdBy: "admin"
     })
   });
@@ -36,14 +66,27 @@ async function createQuiz(){
 }
 
 async function addQuestion(){
-  const res = await fetch("http://localhost:3000/add-question",{
+  const qid = document.getElementById("quizId").value.trim();
+  const ques = document.getElementById("question").value.trim();
+  const o1 = document.getElementById("opt1").value.trim();
+  const o2 = document.getElementById("opt2").value.trim();
+  const o3 = document.getElementById("opt3").value.trim();
+  const o4 = document.getElementById("opt4").value.trim();
+  const ans = document.getElementById("answer").value.trim();
+
+  if(!qid || !ques || !o1 || !o2 || !o3 || !o4 || !ans){
+    alert("Fill all question fields");
+    return;
+  }
+
+  const res = await fetch("/api/add-question",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({
-      quizId: quizId.value,
-      question: question.value,
-      options: [opt1.value,opt2.value,opt3.value,opt4.value],
-      correctAnswer: answer.value
+      quizId: qid,
+      question: ques,
+      options: [o1,o2,o3,o4],
+      correctAnswer: ans
     })
   });
 
@@ -51,3 +94,30 @@ async function addQuestion(){
   alert(data.message);
 }
 </script>
+
+</div>
+
+<script>
+// Only allow admin role
+if(!localStorage.getItem("role") || localStorage.getItem("role") !== "admin"){
+  window.location.href = "/login.html";
+}
+
+// hide logout if not logged in
+const btn = document.getElementById("logoutBtn");
+if(!localStorage.getItem("role") && btn){
+  btn.style.display = "none";
+}
+
+function goHome(){
+  window.location.href = "/";
+}
+
+function logout(){
+  localStorage.removeItem("role");
+  window.location.href = "/login.html";
+}
+</script>
+
+</body>
+</html>

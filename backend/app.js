@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 
 const app = express();
-app.use(express.json());
 const path = require("path");
-app.use(express.static(__dirname + "/../frontend"));
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 //mongoose.connect("mongodb://127.0.0.1:27017/quizDB")
 mongoose.connect("mongodb+srv://viveksf532_db_user:t530JCfLTTTcVvCq@cluster0.ddywtoq.mongodb.net/quizDB?retryWrites=true&w=majority")
@@ -13,16 +14,13 @@ mongoose.connect("mongodb+srv://viveksf532_db_user:t530JCfLTTTcVvCq@cluster0.ddy
 .catch(err=> console.log(err));
 
 app.get("/", (req,res)=>{
-  res.send("Server running");
+  res.sendFile(path.join(__dirname,"../frontend/index.html"));
 });
 
 const quizRoutes = require("./quiz");
-app.use("/", quizRoutes);
+app.use("/api", quizRoutes);
 
 
-app.listen(3000, ()=>{
-  console.log("Server started");
-});
 //REGISTER USER
 // REGISTER
 app.post("/register", async (req, res) => {
@@ -59,4 +57,8 @@ app.post("/login", async (req, res) => {
     message: "Login successful",
     role: user.role
   });
+});
+
+app.listen(3000, ()=>{
+  console.log("Server started");
 });
