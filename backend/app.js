@@ -4,6 +4,8 @@ const User = require("../models/User");
 
 const app = express();
 app.use(express.json());
+const path = require("path");
+app.use(express.static(__dirname + "/../frontend"));
 
 //mongoose.connect("mongodb://127.0.0.1:27017/quizDB")
 mongoose.connect("mongodb+srv://viveksf532_db_user:t530JCfLTTTcVvCq@cluster0.ddywtoq.mongodb.net/quizDB?retryWrites=true&w=majority")

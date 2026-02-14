@@ -27,9 +27,9 @@ async function register(){
     role: role.value
   };
 
-  const res = await fetch("http://localhost:3000/register",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
+  const res = await fetch(window.location.origin + "/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   });
 
