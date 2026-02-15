@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attempt Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div>Online Quiz System</div>
+  <div class="nav-links">
+    <button onclick="goHome()">Home</button>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="container">
+    <div class="card">
+      <h2>Attempt Quiz</h2>
+
+      <input id="quizId" placeholder="Enter Quiz ID">
+      <button onclick="loadQuiz()">Load Quiz</button>
+
+      <div id="quiz"></div>
+
+      <button onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// allow only logged‑in student
+if(!localStorage.getItem("role") || localStorage.getItem("role") !== "student"){
+  window.location.href = "/login.html";
+}
+
+let answers = {};
+
+async function loadQuiz(){
+  answers = {};
+  const id = document.getElementById("quizId").value;
+
+  if(!id){
+    alert("Enter quiz ID first");
+    return;
+  }
+
+  const res = await fetch(window.location.origin + "/api/quiz/" + id);
+  const data = await res.json();
+
+  let html="";
+
+  if(data.length === 0){
+    html = "<p>No questions found for this quiz</p>";
+  } else {
+    data.forEach(q=>{
+      html += `<div class="question"><p><b>${q.question}</b></p>`;
+
+      q.options.forEach(opt=>{
+        html += `
+        <input type="radio" name="${q._id}" value="${opt}"
+        onchange="save('${q._id}','${opt}')"> ${opt} <br>
+        `;
+      });
+
+      html += `</div>`;
+    });
+  }
+
+  document.getElementById("quiz").innerHTML = html;
+}
+
+function save(id,val){
+  answers[id] = val;
+}
+
+async function submitQuiz(){
+  const id = document.getElementById("quizId").value;
+
+  if(!id){
+    alert("Enter quiz ID first");
+    return;
+  }
+
+  if(Object.keys(answers).length === 0){
+    alert("Attempt quiz before submitting");
+    return;
+  }
+
+  const res = await fetch(window.location.origin + "/api/submit-quiz",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      quizId:id,
+      answers:answers
+    })
+  });
+
+  const data = await res.json();
+  alert("Your Score: " + data.score);
+}
+
+// hide logout if not logged in
+if(!localStorage.getItem("role")){
+  const btn = document.getElementById("logoutBtn");
+  if(btn) btn.style.display = "none";
+}
+
+function goHome(){
+  window.location.href = "/";
+}
+
+function logout(){
+  localStorage.removeItem("role");
+  window.location.href = "/login.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="navbar">
+  <div>Online Quiz System</div>
+  <div class="nav-links">
+    <button onclick="goHome()">Home</button>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="container">
+    <div class="card">
+      <h2>Student Dashboard</h2>
+      <p>Welcome! Choose an option below.</p>
+
+      <button onclick="goQuiz()">Attempt Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// allow only logged-in student
+if(!localStorage.getItem("role") || localStorage.getItem("role") !== "student"){
+  window.location.href = "/login.html";
+}
+
+function goQuiz(){
+  window.location.href = "/quiz.html";
+}
+
+// hide logout if not logged in
+if(!localStorage.getItem("role")){
+  const btn = document.getElementById("logoutBtn");
+  if(btn) btn.style.display = "none";
+}
+
+function logout(){
+  localStorage.removeItem("role");
+  window.location.href = "/login.html";
+}
+
+function goHome(){
+  window.location.href = "/";
+}
+</script>
+
+</body>
+</html>

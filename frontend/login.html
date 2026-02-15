@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="navbar">
+    <div>Online Quiz System</div>
+    <div class="nav-links">
+      <button onclick="goHome()">Home</button>
+      <button id="logoutBtn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="page">
+  <div class="container">
+    <div class="card">
+      <h2>Login</h2>
+
+      <input id="email" placeholder="Email">
+      <input id="password" placeholder="Password" type="password">
+
+      <button onclick="login()">Login</button>
+      <p id="msg"></p>
+    </div>
+  </div>
+
+<script>
+async function login(){
+  if(!email.value || !password.value){
+    msg.innerText = "Please enter email and password";
+    return;
+  }
+  const res = await fetch(window.location.origin + "/login",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  });
+
+  const data = await res.json();
+  msg.innerText = data.message;
+
+  if(data.message !== "Login successful"){
+    localStorage.removeItem("role");
+  }
+
+  if(data.role==="admin"){
+  localStorage.setItem("role","admin");
+  window.location.href="/admin.html";
+}
+if(data.role==="student"){
+  localStorage.setItem("role","student");
+  window.location.href="/student.html";
+}
+}
+</script>
+
+</div>
+
+<script>
+if(!localStorage.getItem("role")){
+  document.getElementById("logoutBtn").style.display="none";
+}
+function goHome(){
+  window.location.href="/";
+}
+
+function logout(){
+  localStorage.removeItem("role");
+  window.location.href="/login.html";
+}
+</script>
+</body>
+</html>
