@@ -18,18 +18,28 @@
   <div class="page">
   <div class="container">
     <div class="card">
-<h2>Create Quiz</h2>
+<!-- <h2>Create Quiz</h2>
 
 <input id="title" placeholder="Quiz Title">
 <input id="duration" placeholder="Duration">
 
 <button onclick="createQuiz()">Create Quiz</button>
 
-<hr>
+<hr> -->
 
 <h3>Add Question</h3>
 
-<input id="quizId" placeholder="Quiz ID">
+<select id="section">
+  <option value="">Select Section</option>
+  <option value="html">HTML</option>
+  <option value="css">CSS</option>
+  <option value="javascript">JavaScript</option>
+  <option value="node">Node.js</option>
+  <option value="java">Java</option>
+  <option value="oops">OOPS</option>
+</select>
+
+
 <input id="question" placeholder="Question">
 <input id="opt1" placeholder="Option 1">
 <input id="opt2" placeholder="Option 2">
@@ -40,33 +50,10 @@
 <button onclick="addQuestion()">Add Question</button>
     </div>
   </div>
-
 <script>
-async function createQuiz(){
-  const titleVal = document.getElementById("title").value.trim();
-  const durationVal = document.getElementById("duration").value.trim();
-
-  if(!titleVal || !durationVal){
-    alert("Enter quiz title and duration");
-    return;
-  }
-
-  const res = await fetch("/api/create-quiz",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      title: titleVal,
-      duration: durationVal,
-      createdBy: "admin"
-    })
-  });
-
-  const data = await res.json();
-  alert(data.message);
-}
-
 async function addQuestion(){
-  const qid = document.getElementById("quizId").value.trim();
+
+  const sectionVal = document.getElementById("section").value.trim();
   const ques = document.getElementById("question").value.trim();
   const o1 = document.getElementById("opt1").value.trim();
   const o2 = document.getElementById("opt2").value.trim();
@@ -74,7 +61,7 @@ async function addQuestion(){
   const o4 = document.getElementById("opt4").value.trim();
   const ans = document.getElementById("answer").value.trim();
 
-  if(!qid || !ques || !o1 || !o2 || !o3 || !o4 || !ans){
+  if(!sectionVal || !ques || !o1 || !o2 || !o3 || !o4 || !ans){
     alert("Fill all question fields");
     return;
   }
@@ -83,7 +70,7 @@ async function addQuestion(){
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({
-      quizId: qid,
+      section: sectionVal.toLowerCase(),
       question: ques,
       options: [o1,o2,o3,o4],
       correctAnswer: ans
@@ -93,8 +80,8 @@ async function addQuestion(){
   const data = await res.json();
   alert(data.message);
 }
-</script>
 
+</script>
 </div>
 
 <script>

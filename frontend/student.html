@@ -6,6 +6,7 @@
 </head>
 
 <body>
+
 <div class="navbar">
   <div>Online Quiz System</div>
   <div class="nav-links">
@@ -18,7 +19,7 @@
   <div class="container">
     <div class="card">
       <h2>Student Dashboard</h2>
-      <p>Welcome! Choose an option below.</p>
+      <p>Welcome! Click below to start your quiz.</p>
 
       <button onclick="goQuiz()">Attempt Quiz</button>
     </div>
@@ -26,28 +27,45 @@
 </div>
 
 <script>
-// allow only logged-in student
+// ================= SECURITY CHECK =================
 if(!localStorage.getItem("role") || localStorage.getItem("role") !== "student"){
   window.location.href = "/login.html";
 }
 
+// ================= GET SECTION FROM URL =================
+const params = new URLSearchParams(window.location.search);
+const section = params.get("section");
+
+// Safety check
+if(!section){
+  document.querySelector(".card").innerHTML =
+    "<p>No quiz selected. Please go back and choose a quiz.</p>";
+}
+
+// ================= GO TO QUIZ =================
 function goQuiz(){
-  window.location.href = "/quiz.html";
+  if(!section){
+    alert("No quiz section selected");
+    return;
+  }
+  window.location.href = "/quiz.html?section=" + section;
 }
 
-// hide logout if not logged in
-if(!localStorage.getItem("role")){
-  const btn = document.getElementById("logoutBtn");
-  if(btn) btn.style.display = "none";
-}
-
+// ================= NAVIGATION =================
 function logout(){
   localStorage.removeItem("role");
+  localStorage.removeItem("email");
   window.location.href = "/login.html";
 }
 
 function goHome(){
   window.location.href = "/";
+}
+
+// Hide logout if not logged in
+if(!localStorage.getItem("role")){
+  const btn = document.getElementById("logoutBtn");
+  if(btn) btn.style.display = "none";
 }
 </script>
 

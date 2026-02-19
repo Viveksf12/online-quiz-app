@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema({
-  quizId: String,
+  section: String,          // 👈 ADD THIS
   question: String,
   options: [String],
   correctAnswer: String

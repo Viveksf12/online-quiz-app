@@ -1,56 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  
-<title>Online Quiz System</title>
-<link rel="stylesheet" href="style.css">
+  <title>Quiz Sections</title>
+  <link rel="stylesheet" href="stylehome.css">
 </head>
-
 <body>
   <div class="navbar">
-    <div>Online Quiz System</div>
-    <div class="nav-links">
-      <button onclick="goHome()">Home</button>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
-    </div>
+  <div>Online Quiz System</div>
+  <div>
+    <button onclick="goProfile()">My Profile</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+
+
+<h1>Select Quiz Section</h1>
+
+<div class="container">
+
+  <div class="card" onclick="openQuiz('html')">
+    <h2>HTML Quiz</h2>
+    <p>Test your HTML knowledge</p>
   </div>
 
-  <div class="page">
-  <div class="container">
-    <div class="card">
-      <h1>Online Quiz System</h1>
-
-      <button onclick="goLogin()">Login</button>
-      <button onclick="goRegister()">Register</button>
-    </div>
+  <div class="card" onclick="openQuiz('css')">
+    <h2>CSS Quiz</h2>
+    <p>Test your CSS skills</p>
   </div>
 
-  <script>
-  function goLogin(){
-    window.location.href="/login.html";
+  <div class="card" onclick="openQuiz('javascript')">
+    <h2>JavaScript Quiz</h2>
+    <p>Check your JS concepts</p>
+  </div>
+
+  <div class="card" onclick="openQuiz('node')">
+    <h2>Node.js Quiz</h2>
+    <p>Backend knowledge test</p>
+  </div>
+
+  <div class="card" onclick="openQuiz('java')">
+    <h2>Java Quiz</h2>
+    <p>Core Java questions</p>
+  </div>
+
+  <div class="card" onclick="openQuiz('oops')">
+    <h2>OOPS Quiz</h2>
+    <p>Object Oriented Programming</p>
+  </div>
+
+</div>
+
+<script>
+
+function openQuiz(section){
+
+  const role = localStorage.getItem("role");
+
+  if(!role){
+    localStorage.setItem("redirectSection", section);
+    window.location.href = "login.html";
+    return;
   }
-  function goRegister(){
-    window.location.href="/register.html";
-  }
-  </script>
 
-  </div>
-
-  <script>
-function goHome(){
-  window.location.href = "/";
+  window.location.href = "quiz.html?section=" + section;
 }
 
-// hide logout if not logged in
-if(!localStorage.getItem("role")){
-  const btn = document.getElementById("logoutBtn");
-  if(btn) btn.style.display = "none";
+function goProfile(){
+  window.location.href = "profile.html";
 }
 
 function logout(){
   localStorage.removeItem("role");
-  window.location.href = "/login.html";
+  localStorage.removeItem("email");
+  window.location.href = "login.html";
 }
+
+if(!localStorage.getItem("role")){
+  document.querySelector(".navbar").style.display = "none";
+}
+
+
+
+
 </script>
+
+
 </body>
-</html>
+</html> 

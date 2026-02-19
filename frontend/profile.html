@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="navbar">
+  <div>Online Quiz System</div>
+  <div class="nav-links">
+    <button onclick="goHome()">Home</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="container">
+    <div class="card">
+      <h2>My Quiz Results</h2>
+      <div id="results"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// Check login
+if(!localStorage.getItem("email")){
+  window.location.href = "login.html";
+}
+
+async function loadResults(){
+
+  const email = localStorage.getItem("email");
+
+  const res = await fetch("/api/results/" + email);
+  const data = await res.json();
+
+  let html = "";
+
+  if(data.length === 0){
+    html = "<p>No quiz attempts yet.</p>";
+  } else {
+
+    data.forEach(r=>{
+      html += `
+        <div class="question">
+          <p><b>Section:</b> ${r.section}</p>
+          <p><b>Score:</b> ${r.score} / ${r.total}</p>
+          <p><b>Date:</b> ${new Date(r.date).toLocaleString()}</p>
+          <hr>
+        </div>
+      `;
+    });
+
+  }
+
+  document.getElementById("results").innerHTML = html;
+}
+
+loadResults();
+
+function goHome(){
+  window.location.href = "/";
+}
+
+function logout(){
+  localStorage.removeItem("role");
+  localStorage.removeItem("email");
+  window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -15,7 +15,6 @@
 </div>
 
 <div class="page">
-
 <div class="container">
   <div class="card">
     <h2>Register</h2>
@@ -24,15 +23,14 @@
     <input id="email" placeholder="Email">
     <input id="password" placeholder="Password" type="password">
 
-    <select id="role">
-      <option value="student">Student</option>
-      <option value="admin">Admin</option>
-    </select>
+    <!-- ✅ student only -->
+    <p>Registering as: <b>Student</b></p>
 
     <button onclick="registerUser()">Register</button>
 
     <p id="msg"></p>
   </div>
+</div>
 </div>
 
 <script>
@@ -41,7 +39,7 @@ async function registerUser() {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
+    const role = "student"; // ✅ force student
 
     if(!name || !email || !password){
       document.getElementById("msg").innerText = "Please fill all fields";
@@ -68,16 +66,6 @@ async function registerUser() {
     alert("Server error");
   }
 }
-</script>
-
-</div>
-
-<script>
-// Hide logout if user not logged in
-if(!localStorage.getItem("role")){
-  const btn = document.getElementById("logoutBtn");
-  if(btn) btn.style.display = "none";
-}
 
 function goHome(){
   window.location.href = "/";
@@ -86,6 +74,12 @@ function goHome(){
 function logout(){
   localStorage.removeItem("role");
   window.location.href = "/login.html";
+}
+
+// Hide logout if not logged in
+if(!localStorage.getItem("role")){
+  const btn = document.getElementById("logoutBtn");
+  if(btn) btn.style.display = "none";
 }
 </script>
 

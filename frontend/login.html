@@ -6,6 +6,8 @@
 </head>
 
 <body>
+
+  <!-- NAVBAR -->
   <div class="navbar">
     <div>Online Quiz System</div>
     <div class="nav-links">
@@ -15,24 +17,32 @@
   </div>
 
   <div class="page">
-  <div class="container">
-    <div class="card">
-      <h2>Login</h2>
+    <div class="container">
+      <div class="card">
+        <h2>Login</h2>
 
-      <input id="email" placeholder="Email">
-      <input id="password" placeholder="Password" type="password">
+        <input id="email" placeholder="Email">
+        <input id="password" placeholder="Password" type="password">
 
-      <button onclick="login()">Login</button>
-      <p id="msg"></p>
+        <button onclick="login()">Login</button>
+
+        <p>New Register</p>
+        <button onclick="goRegister()">Register</button>
+
+        <p id="msg"></p>
+      </div>
     </div>
   </div>
 
 <script>
+// ================= LOGIN =================
 async function login(){
+
   if(!email.value || !password.value){
     msg.innerText = "Please enter email and password";
     return;
   }
+
   const res = await fetch(window.location.origin + "/login",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
@@ -47,33 +57,53 @@ async function login(){
 
   if(data.message !== "Login successful"){
     localStorage.removeItem("role");
+    return;
   }
 
-  if(data.role==="admin"){
-  localStorage.setItem("role","admin");
-  window.location.href="/admin.html";
-}
-if(data.role==="student"){
-  localStorage.setItem("role","student");
-  window.location.href="/student.html";
-}
-}
-</script>
+  // ===== ADMIN LOGIN =====
+  if(data.role === "admin"){
+    localStorage.setItem("role","admin");
+    localStorage.setItem("email", data.email);
+    window.location.href = "/admin.html";
+  }
 
-</div>
+  // ===== STUDENT LOGIN =====
+  if(data.role === "student"){
+    localStorage.setItem("role","student");
+    localStorage.setItem("email", data.email);
 
-<script>
-if(!localStorage.getItem("role")){
-  document.getElementById("logoutBtn").style.display="none";
+    const redirectSection = localStorage.getItem("redirectSection");
+
+    if(redirectSection){
+      localStorage.removeItem("redirectSection");
+      window.location.href = "quiz.html?section=" + redirectSection;
+    } else {
+      window.location.href = "/";
+    }
+  }
 }
+
+// ================= NAVIGATION =================
+function goRegister(){
+  window.location.href = "register.html";
+}
+
 function goHome(){
-  window.location.href="/";
+  window.location.href = "/";
 }
 
 function logout(){
   localStorage.removeItem("role");
-  window.location.href="/login.html";
+  localStorage.removeItem("email");
+  window.location.href = "/login.html";
+}
+
+// Hide logout if not logged in
+if(!localStorage.getItem("role")){
+  const btn = document.getElementById("logoutBtn");
+  if(btn) btn.style.display = "none";
 }
 </script>
+
 </body>
 </html>

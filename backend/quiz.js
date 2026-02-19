@@ -1,42 +1,115 @@
 const express = require("express");
 const router = express.Router();
-const Quiz = require("../models/Quiz");
 const Question = require("../models/Question");
+const Result = require("../models/Result");
 
-// CREATE QUIZ
-router.post("/create-quiz", async (req,res)=>{
-  const quiz = new Quiz(req.body);
-  await quiz.save();
-  res.json({ message:"Quiz created", quiz });
-});
 
+// ===============================
 // ADD QUESTION
+// ===============================
 router.post("/add-question", async (req,res)=>{
-  const question = new Question(req.body);
-  await question.save();
-  res.json({ message:"Question added" });
+
+  try {
+
+    const { section, question, options, correctAnswer } = req.body;
+
+    const newQuestion = new Question({
+      section,
+      question,
+      options,
+      correctAnswer
+    });
+
+    await newQuestion.save();
+
+    res.json({ message:"Question added successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message:"Error adding question" });
+  }
+
 });
 
-// GET QUESTIONS BY QUIZ
-router.get("/quiz/:id", async (req,res)=>{
-  const questions = await Question.find({ quizId:req.params.id });
-  res.json(questions);
+
+// ===============================
+// GET QUESTIONS BY SECTION
+// ===============================
+router.get("/quiz/section/:section", async (req,res)=>{
+
+  try {
+
+    const section = req.params.section;
+
+    const questions = await Question.find({ section });
+
+    res.json(questions);
+
+  } catch (error) {
+    res.status(500).json({ message:"Error fetching questions" });
+  }
+
 });
 
+
+// ===============================
 // SUBMIT QUIZ
+// ===============================
+// ===============================
+// SUBMIT QUIZ
+// ===============================
 router.post("/submit-quiz", async (req,res)=>{
-  const { quizId, answers } = req.body;
 
-  const questions = await Question.find({ quizId });
+  try {
 
-  let score = 0;
-  questions.forEach(q=>{
-    if(answers[q._id] === q.correctAnswer){
-      score++;
-    }
-  });
+    const { section, answers, userEmail } = req.body;
 
-  res.json({ score });
+    const questions = await Question.find({ section });
+
+    let score = 0;
+
+    questions.forEach(q => {
+      if (answers[q._id] === q.correctAnswer) {
+        score++;
+      }
+    });
+
+    // ✅ SAVE RESULT IN DATABASE
+    const newResult = new Result({
+      userEmail,
+      section,
+      score,
+      total: questions.length
+    });
+
+    await newResult.save();
+
+    res.json({
+      score: score,
+      total: questions.length
+    });
+
+  } catch (error) {
+    res.status(500).json({ message:"Error submitting quiz" });
+  }
+
 });
+
+// ===============================
+// GET RESULTS BY USER
+// ===============================
+router.get("/results/:email", async (req,res)=>{
+
+  try {
+
+    const results = await Result.find({ userEmail: req.params.email });
+
+    res.json(results);
+
+  } catch (error) {
+    res.status(500).json({ message:"Error fetching results" });
+  }
+
+});
+
 
 module.exports = router;

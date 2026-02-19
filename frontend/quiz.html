@@ -7,116 +7,220 @@
 
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
   <div>Online Quiz System</div>
   <div class="nav-links">
     <button onclick="goHome()">Home</button>
-    <button id="logoutBtn" onclick="logout()">Logout</button>
+    <button onclick="goProfile()">My Profile</button>
+    <button onclick="logout()">Logout</button>
   </div>
 </div>
 
 <div class="page">
   <div class="container">
     <div class="card">
-      <h2>Attempt Quiz</h2>
+      <h2 id="sectionTitle"></h2>
 
-      <input id="quizId" placeholder="Enter Quiz ID">
-      <button onclick="loadQuiz()">Load Quiz</button>
+      <!-- TIMER -->
+      <div id="timer" style="text-align:center; font-weight:bold; color:red;"></div>
 
       <div id="quiz"></div>
+    </div>
+  </div>
+</div>
 
-      <button onclick="submitQuiz()">Submit Quiz</button>
+<!-- ================= EXIT MODAL ================= -->
+<div id="exitModal" class="modal">
+  <div class="modal-content">
+    <h3>Exit Quiz?</h3>
+    <p>Are you sure you want to exit the quiz?</p>
+
+    <div class="modal-buttons">
+      <button onclick="confirmExit()" class="danger">OK</button>
+      <button onclick="closeExitModal()">Cancel</button>
     </div>
   </div>
 </div>
 
 <script>
-// allow only logged‑in student
+
+// ================= SECURITY =================
 if(!localStorage.getItem("role") || localStorage.getItem("role") !== "student"){
   window.location.href = "/login.html";
 }
 
+let questions = [];
+let currentIndex = 0;
 let answers = {};
+let timeLeft = 300; // ⏱ 5 minutes
+let timerInterval;
 
-async function loadQuiz(){
-  answers = {};
-  const id = document.getElementById("quizId").value;
+// ================= GET SECTION =================
+const params = new URLSearchParams(window.location.search);
+const section = params.get("section");
 
-  if(!id){
-    alert("Enter quiz ID first");
+document.getElementById("sectionTitle").innerText =
+  section.toUpperCase() + " Quiz";
+
+// ⭐ Start screen first
+showStartScreen();
+
+// ================= START SCREEN =================
+function showStartScreen(){
+  document.getElementById("quiz").innerHTML = `
+    <div style="text-align:center">
+      <p>Ready to attempt the <b>${section.toUpperCase()}</b> quiz?</p>
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+  `;
+}
+
+// ================= START QUIZ =================
+async function startQuiz(){
+
+  const res = await fetch("/api/quiz/section/" + section);
+  questions = await res.json();
+
+  if(questions.length === 0){
+    document.getElementById("quiz").innerHTML =
+      "<p>No questions found for this section</p>";
     return;
   }
 
-  const res = await fetch(window.location.origin + "/api/quiz/" + id);
-  const data = await res.json();
+  startTimer();
+  showQuestion();
+}
 
-  let html="";
+// ================= TIMER =================
+function startTimer(){
+  updateTimerDisplay();
 
-  if(data.length === 0){
-    html = "<p>No questions found for this quiz</p>";
-  } else {
-    data.forEach(q=>{
-      html += `<div class="question"><p><b>${q.question}</b></p>`;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
 
-      q.options.forEach(opt=>{
-        html += `
-        <input type="radio" name="${q._id}" value="${opt}"
-        onchange="save('${q._id}','${opt}')"> ${opt} <br>
-        `;
-      });
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      alert("Time is up! Quiz auto-submitted.");
+      submitQuiz();
+    }
+  }, 1000);
+}
 
-      html += `</div>`;
-    });
+function updateTimerDisplay(){
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+
+  document.getElementById("timer").innerText =
+    `Time Left: ${minutes}:${seconds.toString().padStart(2,'0')}`;
+}
+
+// ================= SHOW QUESTION =================
+function showQuestion(){
+
+  const q = questions[currentIndex];
+
+  let html = `
+    <div class="question">
+      <p><b>Question ${currentIndex + 1} of ${questions.length}</b></p>
+      <p><b>${q.question}</b></p>
+  `;
+
+  q.options.forEach(opt => {
+    const checked = answers[q._id] === opt ? "checked" : "";
+
+    html += `
+      <input type="radio" name="q" value="${opt}"
+      ${checked}
+      onchange="saveAnswer('${q._id}','${opt}')"> ${opt} <br>
+    `;
+  });
+
+  html += `<br>`;
+
+  if(currentIndex > 0){
+    html += `<button onclick="prevQuestion()">Previous</button>`;
   }
+
+  if(currentIndex < questions.length - 1){
+    html += `<button onclick="nextQuestion()">Next</button>`;
+  }
+
+  html += `<button onclick="submitQuiz()">Submit Quiz</button>`;
+  html += `<button onclick="exitQuiz()" style="background:#e74a3b;">Exit Quiz</button>`;
+
+  html += `</div>`;
 
   document.getElementById("quiz").innerHTML = html;
 }
 
-function save(id,val){
+// ================= SAVE =================
+function saveAnswer(id,val){
   answers[id] = val;
 }
 
+// ================= NEXT =================
+function nextQuestion(){
+  currentIndex++;
+  showQuestion();
+}
+
+// ================= PREVIOUS =================
+function prevQuestion(){
+  currentIndex--;
+  showQuestion();
+}
+
+// ================= SUBMIT =================
 async function submitQuiz(){
-  const id = document.getElementById("quizId").value;
 
-  if(!id){
-    alert("Enter quiz ID first");
-    return;
-  }
+  clearInterval(timerInterval);
 
-  if(Object.keys(answers).length === 0){
-    alert("Attempt quiz before submitting");
-    return;
-  }
-
-  const res = await fetch(window.location.origin + "/api/submit-quiz",{
+  const res = await fetch("/api/submit-quiz",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({
-      quizId:id,
-      answers:answers
+      section: section,
+      answers: answers,
+      userEmail: localStorage.getItem("email")
     })
   });
 
   const data = await res.json();
-  alert("Your Score: " + data.score);
+
+  alert("Your Score: " + data.score + "/" + data.total);
+  window.location.href = "profile.html";
 }
 
-// hide logout if not logged in
-if(!localStorage.getItem("role")){
-  const btn = document.getElementById("logoutBtn");
-  if(btn) btn.style.display = "none";
+// ================= EXIT MODAL =================
+function exitQuiz(){
+  document.getElementById("exitModal").style.display = "flex";
 }
 
+function closeExitModal(){
+  document.getElementById("exitModal").style.display = "none";
+}
+
+function confirmExit(){
+  clearInterval(timerInterval);
+  window.location.href = "/";
+}
+
+// ================= NAV =================
 function goHome(){
   window.location.href = "/";
 }
 
+function goProfile(){
+  window.location.href = "profile.html";
+}
+
 function logout(){
   localStorage.removeItem("role");
+  localStorage.removeItem("email");
   window.location.href = "/login.html";
 }
+
 </script>
 
 </body>
