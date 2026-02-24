@@ -1,173 +1,161 @@
-/* ================= BODY ================= */
-body{
+*{
   margin:0;
-  font-family:'Segoe UI', Arial;
-  background:#f4f6f9;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* ================= PAGE WRAPPER ================= */
-.page{
-  margin-top:80px;
-}
-
-/* ================= CONTAINER ================= */
-.container{
+body{
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  height:100vh;
   display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+  flex-direction:column;
 }
 
-/* ================= CARD ================= */
-.card{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.1);
-  width:350px;
-  max-width:90%;
-}
-
-/* ================= HEADINGS ================= */
-h1,h2{
-  text-align:center;
-}
-
-/* ================= INPUT ================= */
-input{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-
-/* ================= GLOBAL BUTTON ================= */
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:6px;
-  background:#4e73df;
-  color:white;
-  font-size:15px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-button:hover{
-  background:#2e59d9;
-}
-
-/* ================= NAVBAR ================= */
+/* Navbar */
 .navbar{
-  width:100%;
-  background:#4e73df;
-  color:white;
-  padding:12px 20px;
-  position:fixed;
-  top:0;
-  left:0;
-
   display:flex;
   justify-content:space-between;
   align-items:center;
+  padding:15px 40px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  color:white;
+}
 
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
-  box-sizing:border-box;
+.logo{
+  font-size:20px;
   font-weight:bold;
-  z-index:100;
 }
 
-/* ================= NAV LINKS ================= */
-.nav-links{
-  display:flex;
-  gap:10px;
-}
-
-/* ⭐ IMPORTANT: override global button width */
 .nav-links button{
-  width:auto;
-  padding:8px 14px;
-  margin-top:0;
+  padding:8px 15px;
+  margin-left:10px;
   border:none;
-  background:white;
-  color:#4e73df;
-  border-radius:5px;
+  border-radius:20px;
   cursor:pointer;
-  font-weight:500;
+  font-weight:600;
+  transition:0.3s;
 }
 
 .nav-links button:hover{
-  background:#eef2ff;
+  transform:scale(1.05);
 }
 
-/* ================= TIMER ================= */
-#timer{
-  text-align:center;
-  font-weight:bold;
-  color:#e74a3b;
-  margin-bottom:10px;
+.logout{
+  background:#ff4d4d;
+  color:white;
 }
 
-/* ================= QUESTION BOX ================= */
-.question{
-  margin-top:10px;
+.nav-links button:not(.logout){
+  background:white;
+  color:#764ba2;
 }
 
-/* ================= MODAL BACKGROUND ================= */
-.modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
+/* Center Page */
+.page{
+  flex:1;
+  display:flex;
   justify-content:center;
   align-items:center;
-  z-index:999;
 }
 
-/* ================= MODAL BOX ================= */
-.modal-content{
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  width:300px;
+/* Card */
+.card{
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  padding:40px;
+  width:350px;
+  border-radius:20px;
   text-align:center;
-  box-shadow:0 5px 20px rgba(0,0,0,0.3);
-  animation:popup 0.25s ease;
+  color:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* ================= MODAL BUTTONS ================= */
-.modal-buttons{
+.card h2{
+  margin-bottom:5px;
+}
+
+.subtitle{
+  font-size:14px;
+  margin-bottom:25px;
+  opacity:0.8;
+}
+
+/* Floating Input */
+.input-group{
+  position:relative;
+  margin-bottom:20px;
+}
+
+.input-group input{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  outline:none;
+  font-size:14px;
+}
+
+.input-group label{
+  position:absolute;
+  left:12px;
+  top:12px;
+  color:#666;
+  font-size:14px;
+  pointer-events:none;
+  transition:0.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label{
+  top:-10px;
+  left:8px;
+  font-size:12px;
+  color:white;
+}
+
+/* Buttons */
+.primary-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:25px;
+  background:white;
+  color:#764ba2;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.primary-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Divider */
+.divider{
+  margin:20px 0;
+  font-size:12px;
+  opacity:0.7;
+}
+
+/* Register */
+.register-text{
+  font-size:14px;
+}
+
+.register-text span{
+  color:#ffd700;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.register-text span:hover{
+  text-decoration:underline;
+}
+
+.message{
   margin-top:15px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-}
-
-.modal-buttons button{
-  width:auto;
-  padding:8px 16px;
-}
-
-/* danger button */
-.danger{
-  background:#e74a3b !important;
-  color:white !important;
-}
-
-/* ================= POPUP ANIMATION ================= */
-@keyframes popup{
-  from{
-    transform:scale(0.8);
-    opacity:0;
-  }
-  to{
-    transform:scale(1);
-    opacity:1;
-  }
-}
+  font-size:14px;
+} /*

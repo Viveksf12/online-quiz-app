@@ -1,37 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Register</title>
+  <title>Register | QuizMaster</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<div class="navbar">
-  <div>Online Quiz System</div>
-  <div class="nav-links">
-    <button onclick="goHome()">Home</button>
-    <button id="logoutBtn" onclick="logout()">Logout</button>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">🎯 QuizMaster</div>
+    <div class="nav-links">
+      <button onclick="goHome()">Home</button>
+      <button class="logout" id="logoutBtn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="card">
+
+      <h2>Create Account 🚀</h2>
+      <p class="subtitle">Join QuizMaster and start your learning journey</p>
+
+      <div class="input-group">
+        <input id="name" type="text" required>
+        <label>Full Name</label>
+      </div>
+
+      <div class="input-group">
+        <input id="email" type="email" required>
+        <label>Email Address</label>
+      </div>
+
+      <div class="input-group">
+        <input id="password" type="password" required>
+        <label>Password</label>
+      </div>
+
+      <!-- Student Role -->
+      <div class="role-box">
+        <span>Registering as:</span>
+        <span class="role">Student</span>
+      </div>
+
+      <button class="primary-btn" onclick="registerUser()">Create Account</button>
+
+      <p class="login-text">
+        Already have an account?
+        <span onclick="goLogin()">Login</span>
+      </p>
+
+      <p id="msg" class="message"></p>
+
+    </div>
   </div>
-</div>
 
-<div class="page">
-<div class="container">
-  <div class="card">
-    <h2>Register</h2>
 
-    <input id="name" placeholder="Name">
-    <input id="email" placeholder="Email">
-    <input id="password" placeholder="Password" type="password">
-
-    <!-- ✅ student only -->
-    <p>Registering as: <b>Student</b></p>
-
-    <button onclick="registerUser()">Register</button>
-
-    <p id="msg"></p>
-  </div>
-</div>
-</div>
 
 <script>
 async function registerUser() {

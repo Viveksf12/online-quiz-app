@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
+  <title>Login | QuizMaster</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
   <!-- NAVBAR -->
-  <div class="navbar">
-    <div>Online Quiz System</div>
+  <nav class="navbar">
+    <div class="logo">🎯 QuizMaster</div>
     <div class="nav-links">
       <button onclick="goHome()">Home</button>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
+      <button class="logout" id="logoutBtn" onclick="logout()">Logout</button>
     </div>
-  </div>
+  </nav>
 
   <div class="page">
-    <div class="container">
-      <div class="card">
-        <h2>Login</h2>
+    <div class="card">
 
-        <input id="email" placeholder="Email">
-        <input id="password" placeholder="Password" type="password">
+      <h2>Welcome Back 👋</h2>
+      <p class="subtitle">Login to continue your quiz journey</p>
 
-        <button onclick="login()">Login</button>
-
-        <p>New Register</p>
-        <button onclick="goRegister()">Register</button>
-
-        <p id="msg"></p>
+      <div class="input-group">
+        <input id="email" type="email" required>
+        <label>Email Address</label>
       </div>
+
+      <div class="input-group">
+        <input id="password" type="password" required>
+        <label>Password</label>
+      </div>
+
+      <button class="primary-btn" onclick="login()">Login</button>
+
+      <div class="divider">OR</div>
+
+      <p class="register-text">
+        Don't have an account?
+        <span onclick="goRegister()">Register</span>
+      </p>
+
+      <p id="msg" class="message"></p>
+
     </div>
   </div>
+
+
 
 <script>
 // ================= LOGIN =================

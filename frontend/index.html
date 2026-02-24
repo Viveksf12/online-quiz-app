@@ -1,54 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Quiz Sections</title>
+  <title>QuizMaster | Online Quiz Platform</title>
   <link rel="stylesheet" href="stylehome.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/6c5a1b9b1b.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="navbar">
-  <div>Online Quiz System</div>
-  <div>
-    <button onclick="goProfile()">My Profile</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-</div>
 
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">🎯 QuizMaster</div>
+    <div class="nav-buttons">
+      <button onclick="goProfile()">Profile</button>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
 
-<h1>Select Quiz Section</h1>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Upgrade Your Skills with Interactive Quizzes</h1>
+    <p>Practice. Compete. Improve. Track your progress in real-time.</p>
+    <button class="start-btn">Start Exploring</button>
+  </section>
 
-<div class="container">
+  <!-- QUIZ SECTION -->
+  <section class="quiz-section">
+    <h2>Select Your Quiz Category</h2>
 
-  <div class="card" onclick="openQuiz('html')">
-    <h2>HTML Quiz</h2>
-    <p>Test your HTML knowledge</p>
-  </div>
+    <div class="container">
 
-  <div class="card" onclick="openQuiz('css')">
-    <h2>CSS Quiz</h2>
-    <p>Test your CSS skills</p>
-  </div>
+      <div class="card" onclick="openQuiz('html')">
+        <i class="fab fa-html5"></i>
+        <h3>HTML</h3>
+        <p>Master Web Structure</p>
+      </div>
 
-  <div class="card" onclick="openQuiz('javascript')">
-    <h2>JavaScript Quiz</h2>
-    <p>Check your JS concepts</p>
-  </div>
+      <div class="card" onclick="openQuiz('css')">
+        <i class="fab fa-css3-alt"></i>
+        <h3>CSS</h3>
+        <p>Design Like a Pro</p>
+      </div>
 
-  <div class="card" onclick="openQuiz('node')">
-    <h2>Node.js Quiz</h2>
-    <p>Backend knowledge test</p>
-  </div>
+      <div class="card" onclick="openQuiz('javascript')">
+        <i class="fab fa-js"></i>
+        <h3>JavaScript</h3>
+        <p>Make Websites Dynamic</p>
+      </div>
 
-  <div class="card" onclick="openQuiz('java')">
-    <h2>Java Quiz</h2>
-    <p>Core Java questions</p>
-  </div>
+      <div class="card" onclick="openQuiz('node')">
+        <i class="fab fa-node"></i>
+        <h3>Node.js</h3>
+        <p>Backend Development</p>
+      </div>
 
-  <div class="card" onclick="openQuiz('oops')">
-    <h2>OOPS Quiz</h2>
-    <p>Object Oriented Programming</p>
-  </div>
+      <div class="card" onclick="openQuiz('java')">
+        <i class="fas fa-coffee"></i>
+        <h3>Java</h3>
+        <p>Core Programming</p>
+      </div>
 
-</div>
+      <div class="card" onclick="openQuiz('oops')">
+        <i class="fas fa-layer-group"></i>
+        <h3>OOPS</h3>
+        <p>Object-Oriented Concepts</p>
+      </div>
+
+    </div>
+  </section>
+
 
 <script>
 
