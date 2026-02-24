@@ -159,3 +159,119 @@ body{
   margin-top:15px;
   font-size:14px;
 } /*
+
+
+
+
+
+
+
+
+
+
+/* Background */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Center container */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+}
+
+/* Card */
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 20px;
+  width: 500px;
+  max-width: 95%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  color: white;
+}
+
+/* Question text */
+.question p {
+  font-size: 18px;
+}
+
+/* Options spacing */
+.question input[type="radio"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+.question br {
+  display: none;
+}
+
+.question label {
+  display: block;
+  margin: 12px 0;
+}
+
+/* Buttons */
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px 8px;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+/* Primary buttons */
+button:not(.danger) {
+  background: #ffffff;
+  color: #333;
+}
+
+button:not(.danger):hover {
+  background: #f1f1f1;
+  transform: scale(1.05);
+}
+
+/* Danger button */
+button.danger,
+button[style*="e74a3b"] {
+  background: #e74a3b;
+  color: white;
+}
+
+button.danger:hover {
+  background: #c0392b;
+  transform: scale(1.05);
+}
+
+/* Timer */
+#timer {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+}

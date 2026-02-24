@@ -127,14 +127,17 @@ function showQuestion(){
   `;
 
   q.options.forEach(opt => {
-    const checked = answers[q._id] === opt ? "checked" : "";
+  const checked = answers[q._id] === opt ? "checked" : "";
 
-    html += `
+  html += `
+    <label>
       <input type="radio" name="q" value="${opt}"
       ${checked}
-      onchange="saveAnswer('${q._id}','${opt}')"> ${opt} <br>
-    `;
-  });
+      onchange="saveAnswer('${q._id}','${opt}')">
+      ${opt}
+    </label>
+  `;
+});
 
   html += `<br>`;
 
